@@ -29,6 +29,7 @@
   copy:
     src: "{{ item }}"
     dest: /home/rpms/
+    mode: 0644
   with_fileglob:
     - /root/rpmbuild/RPMS/x86_64/slurm*20*.rpm
   tags: install

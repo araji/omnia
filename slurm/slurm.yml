@@ -21,16 +21,16 @@
 - hosts: cluster
   gather_facts: false
   roles:
-    - slurm-common
+    - slurm_common
 
 # Apply Manager Config, start services
 - hosts: manager
   gather_facts: false
   roles:
-    - slurm-manager
+    - slurm_manager
 
 # Start SLURM workers
 - hosts: compute
   gather_facts: false
   roles:
-    - start-slurm-workers
+    - start_slurm_workers

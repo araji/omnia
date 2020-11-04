@@ -24,7 +24,10 @@
   tags: init
 
 - name: Setup Directory for Kubernetes environment for root
-  file: path=/root/.kube state=directory
+  file:
+    path: path=/root/.kube
+    state: directory
+    mode: 0755
   tags: init
 
 - name: Copy Kubernetes Config for root #do this for other users too?
@@ -75,7 +78,7 @@
   tags: init
 
 - name: Setup Calico SDN network
-  shell: kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+  command: kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
   tags: init
 
 #- name: Setup Flannel SDN network
@@ -83,13 +86,13 @@
   #tags: init
 
 - name: Enabled GPU support in Kubernetes
-  shell: kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/1.0.0-beta4/nvidia-device-plugin.yml
+  command: kubectl create -f https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/1.0.0-beta4/nvidia-device-plugin.yml
                            #https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v1.11/nvidia-device-plugin.yml
   register: gpu_enable
   tags: init
 
 - name: Deploy Xilinx Device Plugin
-  shell: kubectl create -f https://raw.githubusercontent.com/Xilinx/FPGA_as_a_Service/master/k8s-fpga-device-plugin/fpga-device-plugin.yml
+  command: kubectl create -f https://raw.githubusercontent.com/Xilinx/FPGA_as_a_Service/master/k8s-fpga-device-plugin/fpga-device-plugin.yml
   register: fpga_enable
   tags: init
 
@@ -97,6 +100,7 @@
   file:
     path: /root/k8s
     state: directory
+    mode: 0755
   tags: init
 
 - name: Create Service Account (K8S Dashboard) Files
@@ -104,7 +108,7 @@
   tags: init
 
 - name: Create Service Account (K8S Dashboard) - Create
-  shell: kubectl create -f /root/k8s/create_admin_user.yaml
+  command: kubectl create -f /root/k8s/create_admin_user.yaml
   tags: init
 
 - name: Create ClusterRoleBinding (K8S Dashboard) Files
@@ -112,9 +116,10 @@
   tags: init
 
 - name: Create ClusterRoleBinding (K8S Dashboard) - Apply
-  shell: kubectl create -f /root/k8s/create_clusterRoleBinding.yaml
+  command: kubectl create -f /root/k8s/create_clusterRoleBinding.yaml
   tags: init
 
+# this may be a problem for non rhel boxes.
 - name: Dump Bearer Token for K8S Dashboard Login
   shell: |
     set -o pipefail
@@ -122,7 +127,7 @@
   tags: init
 
 - name: Edge / Workstation Install allows pods to scheudle on manager
-  shell: kubectl taint nodes --all node-role.kubernetes.io/master-
+  command: kubectl taint nodes --all node-role.kubernetes.io/master-
   when: single_node
   tags: init
 

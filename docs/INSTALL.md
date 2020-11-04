@@ -47,7 +47,7 @@ Omnia playbooks perform several tasks:
     - Docker
     - Kubelet
 
-`computeGPU` playbook installs Nvidia drivers and nvidia-container-runtime-hook
+`compute_gpu` playbook installs Nvidia drivers and nvidia-container-runtime-hook
 * Add yum repositories:
     - Nvidia (container runtime)
 * Install Packages from repos:

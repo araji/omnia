@@ -28,7 +28,7 @@
 - hosts: gpus
   gather_facts: false
   roles:
-    - computeGPU
+    - compute_gpu
 
 # Apply Manager Config
 - hosts: manager
