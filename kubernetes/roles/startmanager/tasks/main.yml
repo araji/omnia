@@ -33,17 +33,21 @@
     dest: /root/.kube/config
     owner: root
     group: root
-    mode: 644
+    mode: 0644
     remote_src: yes
   tags: init
 
 - name: Cluster token
-  shell: kubeadm token list | cut -d ' ' -f1 | sed -n '2p'
+  shell: |
+    set -o pipefail
+    kubeadm token list | cut -d ' ' -f1 | sed -n '2p'
   register: K8S_TOKEN
   tags: init
 
 - name: CA Hash
-  shell: openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'
+  shell: |
+    set -o pipefail
+    openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //'
   register: K8S_MANAGER_CA_HASH
   tags: init
 
@@ -112,7 +116,9 @@
   tags: init
 
 - name: Dump Bearer Token for K8S Dashboard Login
-  shell: kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}') > /root/k8s/token
+  shell: |
+    set -o pipefail
+    kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}') > /root/k8s/token
   tags: init
 
 - name: Edge / Workstation Install allows pods to scheudle on manager

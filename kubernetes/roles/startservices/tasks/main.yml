@@ -58,11 +58,16 @@
   tags: init
 
 - name: Set NFS-Client Provisioner as DEFAULT StorageClass
-  shell: "kubectl patch storageclasses.storage.k8s.io nfs-client -p '{\"metadata\": {\"annotations\":{\"storageclass.kubernetes.io/is-default-class\":\"true\"}}}'"
+  shell: >
+    kubectl patch storageclasses.storage.k8s.io nfs-client
+    -p '{\"metadata\": {\"annotations\":{\"storageclass.kubernetes.io/is-default-class\":\"true\"}}}'
   tags: init
 
 - name: Prometheus deployment
-  shell: helm install stable/prometheus --set alertmanager.persistentVolume.storageClass=nfs-client,server.persistentVolume.storageClass=nfs-client,server.service.type=LoadBalancer --generate-name
+  shell: >
+    helm install stable/prometheus
+    --set alertmanager.persistentVolume.storageClass=nfs-client,server.persistentVolume.storageClass=nfs-client,server.service.type=LoadBalancer
+    --generate-name
   tags: init
 
 - name: Install MPI Operator

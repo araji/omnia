@@ -85,11 +85,11 @@
   tags: install
 
 - name: Create Slurm Cluster
-  command: sacctmgr -i add cluster {{inventory_hostname}}
+  command: sacctmgr -i add cluster {{ inventory_hostname }}
   tags: install
 
 - name: Create Default Slurm Group
-  command: sacctmgr -i add account defaultgroup Cluster={{inventory_hostname}} Description="Default Account" Organization="Default Org"
+  command: sacctmgr -i add account defaultgroup Cluster={{ inventory_hostname }} Description="Default Account" Organization="Default Org"
   tags: install
 
 - name: Add root to the Default Account
